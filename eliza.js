@@ -15,4 +15,20 @@ function elizaSay(text){
   write("Eliza: "+text);
 }
 
+function userQuery(){
+  if(document.getElementById("userInput").value===""){
+
+  }else{
+    userSay(document.getElementById("userInput").value);
+    document.getElementById("userInput").value="";
+    makeElizaAnswer();
+  }
+
+}
+
+function makeElizaAnswer(){
+  
+}
+
+
 elizaSay("Hello, how are you today?")
