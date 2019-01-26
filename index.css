@@ -2,10 +2,20 @@ h1 {
   color: red;
 }
 p{
-  margin: 0;
+  margin: 0.2em;
   padding: 0;
 }
 body{
   width: 20em;
   margin: auto;
+}
+#userInput{
+  width: 16em;
+}
+#userSubmit{
+  width: 4em;
+}
+.space{
+  display: inline-block;
+  width: 0.5em;
 }

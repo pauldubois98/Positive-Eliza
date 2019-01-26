@@ -1,32 +1,27 @@
 function write(text){
+  document.getElementById("conversation").innerHTML+="<p>"+text+"</p>";
+  /*
   var para = document.createElement("P");
-  var t = document.createTextNode(text);
+  var t = document.createTextNode("");
+  t.innerHTML=text;
   para.appendChild(t);
   document.getElementById("conversation").appendChild(para);
+  */
 }
 function userSay(text){
-  write("You:   "+text);
+  write("<strong>You:</strong> <span class='space'></span>"+text);
 }
 function elizaSay(text){
-  write("Eliza: "+text);
+  write("<strong>Eliza:</strong> "+text);
 }
-/*
-function makeElizaAnswer(query){
-  for(model in models){
-    if(query.search(model[0])){
-      console.log('found');
-    }
-  }
 
-}
-*/
 
 function userQuery(){
   if(document.getElementById("userInput").value===""){
 
   }else{
     userSay(document.getElementById("userInput").value);
-    makeElizaAnswer(document.getElementById("userInput").value);
+    elizaSay( makeElizaAnswer(document.getElementById("userInput").value) );
     document.getElementById("userInput").value="";
   }
 }
@@ -35,19 +30,26 @@ elizaSay("Hello, how are you today?");
 function makeElizaAnswer(query){
   var regex;
   var array;
-  for(model in models){
-    regex = RegExp(model[0], 'i');
-    array = regex.exec(query);
+  for(var i = 0; i<models.length; i++){
+    regex = RegExp(models[i][0], 'i');
 
-    if( array!== null ){
+    if( regex.test(query) ){
+      array = regex.exec(query);
       console.log( array );
+      var output=models[i][1][Math.floor(Math.random() * models[i][1].length)];
+      for(var j = 1; j<array.length; j++){
+        output=output.replace("("+j+")", array[j])
+      }
+      return output;
     }
     else {
       console.log( "not found" );
     }
   }
+  return 'defult';
 
 }
+
 
 /*
 Typycal model:
