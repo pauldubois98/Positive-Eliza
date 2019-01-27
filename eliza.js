@@ -41,8 +41,8 @@ function makeElizaAnswer(query) {
     }
   }
   var output = nonModels[Math.floor(Math.random() * nonModels.length)];
-  output = output.replace("{}", reflect(query));
-  return try_use_syns(output);
+  output = output.replace("{}", try_use_syns(reflect(query)));
+  return output;
 }
 
 function try_use_syns(text){
