@@ -19,3 +19,9 @@ body{
   display: inline-block;
   width: 0.5em;
 }
+.user{
+  color: #49F
+}
+.bot{
+  color: #2A3
+}

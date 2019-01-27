@@ -20,11 +20,14 @@
 
 <body>
   <h1>A positive Eliza</h1>
-  <div id="conversation">
+    <form class="" action="" onsubmit="userQuery();">
+      <input id="userInput" type="text" name="" value="" hit="Type here.">
+      <input type="submit" value="Send"/>
 
-  </div>
-    <input id="userInput" type="text" name="" value="" hit="Type here.">
-    <button id="userSubmit" onclick="userQuery()">send</button>
+    </form>
+    <!-- onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('btnSearch').click()" -->
+    <div id="conversation"></div>
 
 </body>
 <script type="text/javascript" src="eliza.js"></script>
