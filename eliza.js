@@ -17,6 +17,7 @@ function userQuery() {
   } else {
     userSay(document.getElementById("userInput").value);
     elizaSay(makeElizaAnswer(document.getElementById("userInput").value));
+    get_keywords(document.getElementById("userInput").value);
     document.getElementById("userInput").value = "";
   }
 }
@@ -40,9 +41,15 @@ function makeElizaAnswer(query) {
       return try_use_syns(output);
     }
   }
-  var output = nonModels[Math.floor(Math.random() * nonModels.length)];
-  output = output.replace("{}", try_use_syns(reflect(query)));
-  return output;
+  if(memory.length>0){
+    var output = memory_models[Math.floor(Math.random() * memory_models.length)];
+    output=output.replace('{}', memory.pop());
+  } else {
+    var output = nonModels[Math.floor(Math.random() * nonModels.length)];
+    output = output.replace("{}", try_use_syns(reflect(query)));
+    return output;
+  }
+
 }
 
 function try_use_syns(text){
@@ -57,31 +64,49 @@ function try_use_syns(text){
 }
 
 function reflect(text) {
-  for (let j = 0; j< reflections.length; j++) {
-    while (text !== text.replace(reflections[j][0],"#temp#")) {
-      text = text.replace(reflections[j][0],"#temp#");
-    }
-    while (text !== text.replace(reflections[j][1],reflections[j][0])) {
-      text = text.replace(reflections[j][1],reflections[j][0]);
-    }
-    while (text !== text.replace("#temp#",reflections[j][1])) {
-      text = text.replace("#temp#",reflections[j][1]);
+  words=text.split(' ');
+  for(var i=0; i<words.length; i++){
+    for(var j=0; j<reflections.length; j++){
+      if(words[i]==reflections[j][0]){
+        words[i]="#temp#";
+      }
+      if(words[i]==reflections[j][1]){
+        words[i]=reflections[j][0]
+      }
+      if(words[i]=="#temp#"){
+        words[i]=reflections[j][1];
+      }
     }
   }
+  text=words.join(' ');
   return text;
 }
 
+function get_keywords(query){
+  words=query.split(' ')
+  for(var i=0; i<words.length; i++){
+    for(var j=0; j<keywords.length; j++){
+      if(words[i]==keywords[j]){
+        memory.push(words[i]);
+      }
+    }
+  }
+}
 
-// a few fe
+var memory=[];
+var keywords=["wife", "family", "work"];
+var memory_models=["Remeber you talked about {}"]
+
+// the reflexions
 var reflections = [
     ["am", "are"],
     ["was", "were"],
     ["I", "you"],
     ["I'd", "you would"],
-    ["I would", "you would"],
-    ["I've", "you have"],
+    ["I would", "you'd"],
+    ["I've", "you've"],
     ["I have", "you have"],
-    ["I'll", "you will"],
+    ["I'll", "you'll"],
     ["I will", "you will"],
     ["my", "your"],
     ["are", "am"],
@@ -89,10 +114,8 @@ var reflections = [
     ["you have", "I've"],
     ["you'll", "I will"],
     ["you will", "I'll"],
-    ["your", "my"],
     ["yours", "mine"],
     ["you", "me"],
-    ["me", "you"]
 ]
 
 // a few synonyms
