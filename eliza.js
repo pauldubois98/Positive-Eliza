@@ -7,7 +7,7 @@ function userSay(text) {
 }
 
 function elizaSay(text) {
-  write("<p class='bot'><strong>Eliza:</strong> " + text + "</p>");
+  write("<p class='bot'><strong>Lily:</strong> " + text + "</p>");
 }
 
 

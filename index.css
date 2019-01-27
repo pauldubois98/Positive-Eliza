@@ -31,7 +31,7 @@ body{background-color: #fce4ec }
 }
 .space{
   display: inline-block;
-  width: 0.5em;
+  width: 0em;
 }
 .user{
   color: #49F
