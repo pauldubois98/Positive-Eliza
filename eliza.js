@@ -1,4 +1,3 @@
-
 function write(text) {
   document.getElementById("conversation").innerHTML = text + document.getElementById("conversation").innerHTML;
 }
@@ -31,9 +30,11 @@ function makeElizaAnswer(query) {
     if (regex.test(query)) {
       array = regex.exec(query);
       // @ is a reference to the previous sample responses
-      while (models[i][1] === "@") {i--; }
+      while (models[i][1] === "@") {
+        i--;
+      }
       var output = models[i][1][Math.floor(Math.random() * models[i][1].length)];
-      console.log(array, models[i][0], output);
+      //console.log(array, models[i][0], output);
       for (var j = 1; j < array.length; j++) {
         var regex = /\,(.*)[\?\!]?/gi;
         output = output.replace("{" + j + "}", reflect(array[j].replace(regex, '')));
@@ -41,9 +42,10 @@ function makeElizaAnswer(query) {
       return try_use_syns(output);
     }
   }
-  if(memory.length>0){
+  if (memory.length > 0) {
     var output = memory_models[Math.floor(Math.random() * memory_models.length)];
-    output=output.replace('{}', memory.pop());
+    output = output.replace('{}', memory.pop());
+    return output;
   } else {
     var output = nonModels[Math.floor(Math.random() * nonModels.length)];
     output = output.replace("{}", try_use_syns(reflect(query)));
@@ -52,195 +54,199 @@ function makeElizaAnswer(query) {
 
 }
 
-function try_use_syns(text){
-  words=text.split(' ');
-  for(var i=0; i<words.length; i++){
-    var j=synonymsList.indexOf(words[i]);
-    if(j>=0 && Math.random()>0.3){
-      words[i]= synonyms[j][rand=Math.floor(Math.random()* synonyms[j].length)];
+function try_use_syns(text) {
+  words = text.split(' ');
+  for (var i = 0; i < words.length; i++) {
+    var j = synonymsList.indexOf(words[i]);
+    if (j >= 0 && Math.random() > 0.3) {
+      words[i] = synonyms[j][rand = Math.floor(Math.random() * synonyms[j].length)];
     }
   }
   return words.join(' ');
 }
 
 function reflect(text) {
-  words=text.split(' ');
-  for(var i=0; i<words.length; i++){
-    for(var j=0; j<reflections.length; j++){
-      if(words[i]==reflections[j][0]){
-        words[i]="#temp#";
+  words = text.split(' ');
+  for (var i = 0; i < words.length; i++) {
+    for (var j = 0; j < reflections.length; j++) {
+      if (words[i] == reflections[j][0]) {
+        words[i] = "#temp#";
       }
-      if(words[i]==reflections[j][1]){
-        words[i]=reflections[j][0]
+      if (words[i] == reflections[j][1]) {
+        words[i] = reflections[j][0]
       }
-      if(words[i]=="#temp#"){
-        words[i]=reflections[j][1];
+      if (words[i] == "#temp#") {
+        words[i] = reflections[j][1];
       }
     }
   }
-  text=words.join(' ');
+  text = words.join(' ');
   return text;
 }
 
-function get_keywords(query){
-  words=query.split(' ')
-  for(var i=0; i<words.length; i++){
-    for(var j=0; j<keywords.length; j++){
-      if(words[i]==keywords[j]){
+function get_keywords(query) {
+  words = query.split(' ')
+  for (var i = 0; i < words.length; i++) {
+    for (var j = 0; j < keywords.length; j++) {
+      if (words[i] == keywords[j]) {
         memory.push(words[i]);
       }
     }
   }
 }
 
-var memory=[];
-var keywords=["wife", "family", "work"];
-var memory_models=["Remeber you talked about {}"]
+var memory = [];
+var keywords = ["wife", "family", "work"];
+var memory_models = ["Remeber you talked about your {}",
+  "Can you tell me more about your {}?"
+]
 
 // the reflexions
 var reflections = [
-    ["am", "are"],
-    ["was", "were"],
-    ["I", "you"],
-    ["I'd", "you would"],
-    ["I would", "you'd"],
-    ["I've", "you've"],
-    ["I have", "you have"],
-    ["I'll", "you'll"],
-    ["I will", "you will"],
-    ["my", "your"],
-    ["are", "am"],
-    ["you've", "I have"],
-    ["you have", "I've"],
-    ["you'll", "I will"],
-    ["you will", "I'll"],
-    ["yours", "mine"],
-    ["you", "me"],
+  ["am", "are"],
+  ["was", "were"],
+  ["I", "you"],
+  ["I'd", "you would"],
+  ["I would", "you'd"],
+  ["I've", "you've"],
+  ["I have", "you have"],
+  ["I'll", "you'll"],
+  ["I will", "you will"],
+  ["my", "your"],
+  ["are", "am"],
+  ["you've", "I have"],
+  ["you have", "I've"],
+  ["you'll", "I will"],
+  ["you will", "I'll"],
+  ["yours", "mine"],
+  ["you", "me"],
 ]
 
 // a few synonyms
-var synonymsList = ["Come", "Go", "Run", "Hurry", "Hide", "Move", "Do", "Have",
-"Use", "Get", "Keep", "Put", "Take", "Make", "Break", "Destroy", "Kill", "Cut",
-"Fall", "Fly", "Decide", "Help", "Mark", "Plan", "Show", "Begin", "End", "Big",
-"Little", "New", "Old", "False", "True", "Fast", "Slow", "Cool", "Hot", "Quiet",
-"Noisy", "All", "None", "Normal", "Strange", "Describe", "Difference",
-"Explain", "Idea", "Look", "Story", "Tell", "Think", "Anger", "Angry", "Calm",
-"Eager", "Fear", "Happy", "Hate", "Love", "Moody", "Sad", "Scared", "Awful",
-"Bad", "Crooked", "Dangerous", "Dark", "Dull", "Fat", "Gross", "Hurt", "Lazy",
-"Predicament", "Trouble", "Ugly", "Amazing", "Beautiful", "Brave", "Bright",
-"Delicious", "Enjoy", "Famous", "Funny", "Good", "Great", "Mischievous", "Neat",
-"Popular", "Answer", "Ask", "Cry", "Say", "Mean", "Somewhat",
-"Somehow", "anyhow", "Definite", "Fair", "Important", "Interesting", "Part",
-"Place"];
+var synonymsList = ["Come", "Go", "Run", "Hurry", "Hide", "Move", "Do",
+  "Use", "Get", "Keep", "Put", "Take", "Make", "Break", "Destroy", "Kill", "Cut",
+  "Fall", "Fly", "Decide", "Help", "Mark", "Plan", "Show", "Begin", "End", "Big",
+  "Little", "New", "Old", "False", "True", "Fast", "Slow", "Cool", "Hot", "Quiet",
+  "Noisy", "All", "None", "Normal", "Strange", "Describe", "Difference",
+  "Explain", "Idea", "Look", "Story", "Tell", "Think", "Anger", "Angry", "Calm",
+  "Eager", "Fear", "Happy", "Hate", "Love", "Moody", "Sad", "Scared", "Awful",
+  "Bad", "Crooked", "Dangerous", "Dark", "Dull", "Fat", "Gross", "Hurt", "Lazy",
+  "Predicament", "Trouble", "Ugly", "Amazing", "Beautiful", "Brave", "Bright",
+  "Delicious", "Enjoy", "Famous", "Funny", "Good", "Great", "Mischievous", "Neat",
+  "Popular", "Answer", "Ask", "Cry", "Say", "Mean", "Somewhat",
+  "Somehow", "anyhow", "Definite", "Fair", "Important", "Interesting", "Part",
+  "Place"
+];
 
-var synonyms =[['Come', 'advance', 'approach', 'arrive', 'near', 'reach'],
-['Go', 'depart', 'disappear', 'fade', 'move', 'proceed'],
-['Run', 'dash', 'escape', 'elope', 'flee', 'hasten'],
-['Hurry', 'rush', 'run', 'speed', 'race', 'hasten'],
-['Hide', 'conceal', 'cover', 'mask', 'cloak', 'camouflage'],
-['Move', 'plod', 'go', 'creep', 'crawl', 'inch'],
-['Do', 'execute', 'enact', 'carry out', 'finish', 'conclude'],
-['Have', 'hold', 'possess', 'own', 'contain', 'acquire'],
-['Use', 'employ', 'utilize', 'exhaust', 'spend', 'expend'],
-['Get', 'acquire', 'obtain', 'secure', 'procure', 'gain'],
-['Keep', 'hold', 'retain', 'withhold', 'preserve', 'maintain'],
-['Put', 'place', 'set', 'attach', 'establish', 'assign'],
-['Take', 'hold', 'catch', 'seize', 'grasp', 'win'],
-['Make', 'create', 'originate', 'invent', 'beget', 'form'],
-['Break', 'fracture', 'rupture', 'shatter', 'smash', 'wreck'],
-['Destroy', 'ruin', 'demolish', 'raze', 'waste', 'kill'],
-['Kill', 'slay', 'execute', 'assassinate', 'murder', 'destroy'],
-['Cut', 'gash', 'slash', 'prick', 'nick', 'sever'],
-['Fall', 'drop', 'descend', 'plunge', 'topple', 'tumble'],
-['Fly', 'soar', 'hover', 'flit', 'wing', 'flee'],
-['Decide', 'determine', 'settle', 'choose', 'resolve'],
-['Help', 'aid', 'assist', 'support', 'encourage', 'back'],
-['Mark', 'label', 'tag', 'price', 'ticket', 'impress'],
-['Plan', 'plot', 'scheme', 'design', 'draw', 'map'],
-['Show', 'display', 'exhibit', 'present', 'note', 'point to'],
-['Begin', 'start', 'open', 'launch', 'initiate', 'commence'],
-['End', 'stop', 'finish', 'terminate', 'conclude', 'close'],
-['Big', 'large', 'enormous', 'huge', 'immense', 'gigantic'],
-['Little', 'small', 'tiny', 'diminutive', 'shrimp', 'runt'],
-['New', 'fresh', 'unique', 'original', 'unusual', 'novel'],
-['Old', 'feeble', 'frail', 'ancient', 'weak', 'aged'],
-['False', 'wrong', 'fake', 'fraudulent', 'counterfeit', 'spurious'],
-['True', 'right', 'accurate', 'proper', 'precise', 'exact'],
-['Fast', 'quick', 'rapid', 'speedy', 'fleet', 'hasty'],
-['Slow', 'unhurried', 'gradual', 'leisurely', 'late', 'behind'],
-['Cool', 'chilly', 'cold', 'frosty', 'wintry', 'icy'],
-['Hot', 'feverish', 'warm', 'heated', 'sweltering', 'torrid'],
-['Quiet', 'silent', 'still', 'soundless', 'mute', 'tranquil'],
-['Noisy', 'loudly', 'earsplitting', 'stentorian', 'strident', 'clamorous'],
-['All', 'complete', 'entire', 'full', 'gross', 'outright'],
-['None', 'nothing', 'nobody', 'no one', 'zero', 'zilch'],
-['Normal', 'daily', 'traditional', 'familiar', 'routine', 'proper'],
-['Strange', 'abnormal', 'aberrant', 'anomalous', 'bent', 'bizarre'],
-['Describe', 'portray', 'characterize', 'picture', 'narrate', 'relate'],
-['Difference', 'disagreement', 'inequity', 'contrast', 'dissimilarity', 'incompatibility'],
-['Explain', 'elaborate', 'clarify', 'define', 'interpret', 'justify'],
-['Idea', 'thought', 'concept', 'conception', 'notion', 'understanding'],
-['Look', 'gaze', 'see', 'glance', 'watch', 'survey'],
-['Story', 'tale', 'myth', 'legend', 'fable', 'yarn'],
-['Tell', 'disclose', 'reveal', 'show', 'expose', 'uncover'],
-['Think', 'judge', 'deem', 'assume', 'believe', 'consider'],
-['Anger', 'enrage', 'infuriate', 'arouse', 'nettle', 'exasperate'],
-['Angry', 'mad', 'furious', 'enraged', 'excited', 'wrathful'],
-['Calm', 'quiet', 'peaceful', 'still', 'tranquil', 'mild'],
-['Eager', 'keen', 'fervent', 'enthusiastic', 'involved', 'interested'],
-['Fear', 'fright', 'dread', 'terror', 'alarm', 'dismay'],
-['Happy', 'pleased', 'contented', 'satisfied', 'delighted', 'elated'],
-['Hate', 'despise', 'loathe', 'detest', 'abhor', 'disfavor'],
-['Love', 'like', 'admire', 'esteem', 'fancy', 'care for'],
-['Moody', 'temperamental', 'changeable', 'short-tempered', 'glum', 'morose'],
-['Sad', 'miserable', 'uncomfortable', 'wretched', 'heart-broken', 'unfortunate'],
-['Scared', 'afraid', 'frightened', 'alarmed', 'terrified', 'panicked'],
-['Awful', 'dreadful', 'terrible', 'abominable', 'bad', 'poor'],
-['Bad', 'evil', 'immoral', 'wicked', 'corrupt', 'sinful'],
-['Crooked', 'bent', 'twisted', 'curved', 'hooked', 'zigzag'],
-['Dangerous', 'perilous', 'hazardous', 'risky', 'uncertain', 'unsafe'],
-['Dark', 'shadowy', 'unlit', 'murky', 'gloomy', 'dim'],
-['Dull', 'boring', 'tiring,', 'tiresome', 'uninteresting', 'slow'],
-['Fat', 'stout', 'corpulent', 'fleshy', 'beefy', 'paunchy'],
-['Gross', 'improper', 'rude', 'coarse', 'indecent', 'crude'],
-['Hurt', 'damage', 'harm', 'injure', 'wound', 'distress'],
-['Lazy', 'indolent', 'slothful', 'idle', 'inactive', 'sluggish'],
-['Predicament', 'quandary', 'dilemma', 'pickle', 'problem', 'plight'],
-['Trouble', 'distress', 'anguish', 'anxiety', 'worry', 'wretchedness'],
-['Ugly', 'hideous', 'frightful', 'frightening', 'shocking', 'horrible'],
-['Amazing', 'incredible', 'unbelievable', 'improbable', 'fabulous', 'wonderful'],
-['Beautiful', 'pretty', 'lovely', 'handsome', 'attractive', 'gorgeous'],
-['Brave', 'courageous', 'fearless', 'dauntless', 'intrepid', 'plucky'],
-['Bright', 'shining', 'shiny', 'gleaming', 'brilliant', 'sparkling'],
-['Delicious', 'savory', 'delectable', 'appetizing', 'luscious', 'scrumptious'],
-['Enjoy', 'appreciate', 'delight in', 'be pleased', 'indulge in', 'luxuriate in'],
-['Famous', 'well-known', 'renowned', 'celebrated', 'famed', 'eminent'],
-['Funny', 'humorous', 'amusing', 'droll', 'comic', 'comical'],
-['Good', 'excellent', 'fine', 'superior', 'wonderful', 'marvelous'],
-['Great', 'noteworthy', 'worthy', 'distinguished', 'remarkable', 'grand'],
-['Mischievous', 'prankish', 'playful', 'naughty', 'roguish', 'waggish'],
-['Neat', 'clean', 'orderly', 'tidy', 'trim', 'dapper'],
-['Popular', 'well-liked', 'approved', 'accepted', 'favorite', 'celebrated'],
-['Answer', 'reply', 'respond', 'retort', 'acknowledge'],
-['Ask', 'question', 'inquire of', 'seek information from', 'put a question to', 'demand'],
-['Cry', 'shout', 'yell', 'yowl', 'scream', 'roar'],
-['Say/Tell', 'inform', 'notify', 'advise', 'relate', 'recount'],
-['Mean (Something)', 'add up to', 'affect', 'be important', 'be of value', 'be substantive'],
-['Somewhat', 'a little', 'sort of', 'kind of', 'a bit', 'relatively'],
-['Somehow', 'in a way', 'virtually', 'to a certain extent', 'in some measure', 'to some extent'],
-['anyhow', 'anyway', 'anywise', 'by hook or by crook', 'another', 'howsoever'],
-['Definite', 'certain', 'sure', 'positive', 'determined', 'clear'],
-['Fair', 'just', 'impartial', 'unbiased', 'objective', 'unprejudiced'],
-['Important', 'necessary', 'vital', 'critical', 'indispensable', 'valuable'],
-['Interesting', 'fascinating', 'engaging', 'sharp', 'keen', 'bright'],
-['Part', 'portion', 'share', 'piece', 'allotment', 'section'],
-['Place', 'space', 'area', 'spot', 'plot', 'region']];
+var synonyms = [
+  ['Come', 'advance', 'approach', 'arrive', 'near', 'reach'],
+  ['Go', 'depart', 'disappear', 'fade', 'move', 'proceed'],
+  ['Run', 'dash', 'escape', 'elope', 'flee', 'hasten'],
+  ['Hurry', 'rush', 'run', 'speed', 'race', 'hasten'],
+  ['Hide', 'conceal', 'cover', 'mask', 'cloak', 'camouflage'],
+  ['Move', 'plod', 'go', 'creep', 'crawl', 'inch'],
+  ['Do', 'execute', 'enact', 'carry out', 'finish', 'conclude'],
+  ['Use', 'employ', 'utilize', 'exhaust', 'spend', 'expend'],
+  ['Get', 'acquire', 'obtain', 'secure', 'procure', 'gain'],
+  ['Keep', 'hold', 'retain', 'withhold', 'preserve', 'maintain'],
+  ['Put', 'place', 'set', 'attach', 'establish', 'assign'],
+  ['Take', 'hold', 'catch', 'seize', 'grasp', 'win'],
+  ['Make', 'create', 'originate', 'invent', 'beget', 'form'],
+  ['Break', 'fracture', 'rupture', 'shatter', 'smash', 'wreck'],
+  ['Destroy', 'ruin', 'demolish', 'raze', 'waste', 'kill'],
+  ['Kill', 'slay', 'execute', 'assassinate', 'murder', 'destroy'],
+  ['Cut', 'gash', 'slash', 'prick', 'nick', 'sever'],
+  ['Fall', 'drop', 'descend', 'plunge', 'topple', 'tumble'],
+  ['Fly', 'soar', 'hover', 'flit', 'wing', 'flee'],
+  ['Decide', 'determine', 'settle', 'choose', 'resolve'],
+  ['Help', 'aid', 'assist', 'support', 'encourage', 'back'],
+  ['Mark', 'label', 'tag', 'price', 'ticket', 'impress'],
+  ['Plan', 'plot', 'scheme', 'design', 'draw', 'map'],
+  ['Show', 'display', 'exhibit', 'present', 'note', 'point to'],
+  ['Begin', 'start', 'open', 'launch', 'initiate', 'commence'],
+  ['End', 'stop', 'finish', 'terminate', 'conclude', 'close'],
+  ['Big', 'large', 'enormous', 'huge', 'immense', 'gigantic'],
+  ['Little', 'small', 'tiny', 'diminutive', 'shrimp', 'runt'],
+  ['New', 'fresh', 'unique', 'original', 'unusual', 'novel'],
+  ['Old', 'feeble', 'frail', 'ancient', 'weak', 'aged'],
+  ['False', 'wrong', 'fake', 'fraudulent', 'counterfeit', 'spurious'],
+  ['True', 'right', 'accurate', 'proper', 'precise', 'exact'],
+  ['Fast', 'quick', 'rapid', 'speedy', 'fleet', 'hasty'],
+  ['Slow', 'unhurried', 'gradual', 'leisurely', 'late', 'behind'],
+  ['Cool', 'chilly', 'cold', 'frosty', 'wintry', 'icy'],
+  ['Hot', 'feverish', 'warm', 'heated', 'sweltering', 'torrid'],
+  ['Quiet', 'silent', 'still', 'soundless', 'mute', 'tranquil'],
+  ['Noisy', 'loudly', 'earsplitting', 'stentorian', 'strident', 'clamorous'],
+  ['All', 'complete', 'entire', 'full', 'gross', 'outright'],
+  ['None', 'nothing', 'nobody', 'no one', 'zero', 'zilch'],
+  ['Normal', 'daily', 'traditional', 'familiar', 'routine', 'proper'],
+  ['Strange', 'abnormal', 'aberrant', 'anomalous', 'bent', 'bizarre'],
+  ['Describe', 'portray', 'characterize', 'picture', 'narrate', 'relate'],
+  ['Difference', 'disagreement', 'inequity', 'contrast', 'dissimilarity', 'incompatibility'],
+  ['Explain', 'elaborate', 'clarify', 'define', 'interpret', 'justify'],
+  ['Idea', 'thought', 'concept', 'conception', 'notion', 'understanding'],
+  ['Look', 'gaze', 'see', 'glance', 'watch', 'survey'],
+  ['Story', 'tale', 'myth', 'legend', 'fable', 'yarn'],
+  ['Tell', 'disclose', 'reveal', 'show', 'expose', 'uncover'],
+  ['Think', 'judge', 'deem', 'assume', 'believe', 'consider'],
+  ['Anger', 'enrage', 'infuriate', 'arouse', 'nettle', 'exasperate'],
+  ['Angry', 'mad', 'furious', 'enraged', 'excited', 'wrathful'],
+  ['Calm', 'quiet', 'peaceful', 'still', 'tranquil', 'mild'],
+  ['Eager', 'keen', 'fervent', 'enthusiastic', 'involved', 'interested'],
+  ['Fear', 'fright', 'dread', 'terror', 'alarm', 'dismay'],
+  ['Happy', 'pleased', 'contented', 'satisfied', 'delighted', 'elated'],
+  ['Hate', 'despise', 'loathe', 'detest', 'abhor', 'disfavor'],
+  ['Love', 'like', 'admire', 'esteem', 'fancy', 'care for'],
+  ['Moody', 'temperamental', 'changeable', 'short-tempered', 'glum', 'morose'],
+  ['Sad', 'miserable', 'uncomfortable', 'wretched', 'heart-broken', 'unfortunate'],
+  ['Scared', 'afraid', 'frightened', 'alarmed', 'terrified', 'panicked'],
+  ['Awful', 'dreadful', 'terrible', 'abominable', 'bad', 'poor'],
+  ['Bad', 'evil', 'immoral', 'wicked', 'corrupt', 'sinful'],
+  ['Crooked', 'bent', 'twisted', 'curved', 'hooked', 'zigzag'],
+  ['Dangerous', 'perilous', 'hazardous', 'risky', 'uncertain', 'unsafe'],
+  ['Dark', 'shadowy', 'unlit', 'murky', 'gloomy', 'dim'],
+  ['Dull', 'boring', 'tiring,', 'tiresome', 'uninteresting', 'slow'],
+  ['Fat', 'stout', 'corpulent', 'fleshy', 'beefy', 'paunchy'],
+  ['Gross', 'improper', 'rude', 'coarse', 'indecent', 'crude'],
+  ['Hurt', 'damage', 'harm', 'injure', 'wound', 'distress'],
+  ['Lazy', 'indolent', 'slothful', 'idle', 'inactive', 'sluggish'],
+  ['Predicament', 'quandary', 'dilemma', 'pickle', 'problem', 'plight'],
+  ['Trouble', 'distress', 'anguish', 'anxiety', 'worry', 'wretchedness'],
+  ['Ugly', 'hideous', 'frightful', 'frightening', 'shocking', 'horrible'],
+  ['Amazing', 'incredible', 'unbelievable', 'improbable', 'fabulous', 'wonderful'],
+  ['Beautiful', 'pretty', 'lovely', 'handsome', 'attractive', 'gorgeous'],
+  ['Brave', 'courageous', 'fearless', 'dauntless', 'intrepid', 'plucky'],
+  ['Bright', 'shining', 'shiny', 'gleaming', 'brilliant', 'sparkling'],
+  ['Delicious', 'savory', 'delectable', 'appetizing', 'luscious', 'scrumptious'],
+  ['Enjoy', 'appreciate', 'delight in', 'be pleased', 'indulge in', 'luxuriate in'],
+  ['Famous', 'well-known', 'renowned', 'celebrated', 'famed', 'eminent'],
+  ['Funny', 'humorous', 'amusing', 'droll', 'comic', 'comical'],
+  ['Good', 'excellent', 'fine', 'superior', 'wonderful', 'marvelous'],
+  ['Great', 'noteworthy', 'worthy', 'distinguished', 'remarkable', 'grand'],
+  ['Mischievous', 'prankish', 'playful', 'naughty', 'roguish', 'waggish'],
+  ['Neat', 'clean', 'orderly', 'tidy', 'trim', 'dapper'],
+  ['Popular', 'well-liked', 'approved', 'accepted', 'favorite', 'celebrated'],
+  ['Answer', 'reply', 'respond', 'retort', 'acknowledge'],
+  ['Ask', 'question', 'inquire of', 'seek information from', 'put a question to', 'demand'],
+  ['Cry', 'shout', 'yell', 'yowl', 'scream', 'roar'],
+  ['Say/Tell', 'inform', 'notify', 'advise', 'relate', 'recount'],
+  ['Mean (Something)', 'add up to', 'affect', 'be important', 'be of value', 'be substantive'],
+  ['Somewhat', 'a little', 'sort of', 'kind of', 'a bit', 'relatively'],
+  ['Somehow', 'in a way', 'virtually', 'to a certain extent', 'in some measure', 'to some extent'],
+  ['anyhow', 'anyway', 'anywise', 'by hook or by crook', 'another', 'howsoever'],
+  ['Definite', 'certain', 'sure', 'positive', 'determined', 'clear'],
+  ['Fair', 'just', 'impartial', 'unbiased', 'objective', 'unprejudiced'],
+  ['Important', 'necessary', 'vital', 'critical', 'indispensable', 'valuable'],
+  ['Interesting', 'fascinating', 'engaging', 'sharp', 'keen', 'bright'],
+  ['Part', 'portion', 'share', 'piece', 'allotment', 'section'],
+  ['Place', 'space', 'area', 'spot', 'plot', 'region']
+];
 
 
 
-  ////////////////////////////////////////////////////////////////////////////
-  ///////////////////////////      MODELS      ///////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+///////////////////////////      MODELS      ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -250,7 +256,9 @@ models = [
   //////////////////////////      Mines       ////////////////////////////////
   ['(.*)i ([a-zA-Z]*) you(.*)',
     ["I think that I {2} you too.",
-    "Can you really {2} a bot?"]],
+      "Can you really {2} a bot?"
+    ]
+  ],
   ['(.*) if (.*)',
     ["Right, is it possible that {2} if {1}",
       "Do you think it's likely that {2}?",
@@ -267,8 +275,9 @@ models = [
 
   ["(.*) alone(.*)",
     ["Do you know why?",
-    "How long have you been feeling this way for?",
-    "Do you want to talk about it?"]
+      "How long have you been feeling this way for?",
+      "Do you want to talk about it?"
+    ]
   ],
 
   ["(.*) else (.*)",
@@ -278,12 +287,15 @@ models = [
     ["That is ok, everyone feels this way sometimes",
       "How long have you been feeling this way for?",
       "Many others feel this way to, it's nothing we can't work through",
-      "I am here to listen to you"]
-    ],
+      "I am here to listen to you"
+    ]
+  ],
   ["(.*) don't know(.*)",
-  ["Let's try and find out, what is on your mind?",
-    "What have you been up to?",
-    "What have you been thinking about?"]],
+    ["Let's try and find out, what is on your mind?",
+      "What have you been up to?",
+      "What have you been thinking about?"
+    ]
+  ],
 
 
 
@@ -409,7 +421,7 @@ models = [
 
   ]],
   ["(.*)i (need) (.*)", '@'],
-  ["(.*)i am(.*)(sad) (.*)", [
+  ["(.*)i am(.*)(sad)(.*)", [
     "I am sorry to hear that you are {3}. But try to keep positive !",
     "How can I help you not being {3} ?",
     "I'm sure it's not pleasant to be {3}. To change your ideas, tell me about something else.",
@@ -485,6 +497,10 @@ models = [
     "Do you believe it is normal to be {2} ?",
     "Do you enjoy being {2} ?",
     "Do you know anyone else who is {2} ?"
+  ]],
+  ['i am', [
+    "I trust you",
+    "Right, I understand"
   ]],
   ["(.*) i (.*) you (.*)", [
     "Perhaps in your fantasies we {2} each other.",
