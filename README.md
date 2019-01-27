@@ -16,13 +16,18 @@ As a web site, Lily chat bot is multi platforms:
 Website for computers
 ![GitHub Logo](/doc/demo1bis.png)
 
+![GitHub Logo](/doc/demo1ter.png)
+
 ![GitHub Logo](/doc/demo1.png)
 >Lily didn't understand yet what being a human means
 
 Responsive website for cell phones
 ![GitHub Logo](/doc/demo2.jpg)
 
-
+### Explanations of the name:
+Lily: A name of a flower, to make people feel peaceful
+Prevously "Positive-Eliza": Eliza was the first program to pass the Turing test.
+Our algorithm is based on Eliza's one, with added features that it keeps as positive as possible.
 
 
 ------------
