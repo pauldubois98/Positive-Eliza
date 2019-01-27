@@ -1,3 +1,4 @@
+
 function write(text) {
   document.getElementById("conversation").innerHTML = text + document.getElementById("conversation").innerHTML;
 }
@@ -9,7 +10,6 @@ function userSay(text) {
 function elizaSay(text) {
   write("<p class='bot'><strong>Lily:</strong> " + text + "</p>");
 }
-
 
 function userQuery() {
   if (document.getElementById("userInput").value === "") {
@@ -242,9 +242,27 @@ models = [
     ]
   ],
 
+  ["(.*) alone(.*)",
+    ["Do you know why?",
+    "How long have you been feeling this way for?",
+    "Do you want to talk about it?"]
+  ],
+
   ["(.*) else (.*)",
     ['"else" statements are usually used in coding, are you a programmer?']
   ],
+  ['(.*) lonely(.*)',
+    ["That is ok, everyone feels this way sometimes",
+      "How long have you been feeling this way for?",
+      "Many others feel this way to, it's nothing we can't work through",
+      "I am here to listen to you"]
+    ],
+  ["(.*) don't know(.*)",
+  ["Let's try and find out, what is on your mind?",
+    "What have you been up to?",
+    "What have you been thinking about?"]],
+
+
 
   ///////////////////////    mixture of data bases    ////////////////////////
 
@@ -269,7 +287,7 @@ models = [
   ]],
 
   ["(.*)i (.*)forget (.*)", [
-    "Can you think of why you might {2} forget {3} ?",
+    "Can you think of why you might {2} forgot {3} ?",
     "Why can't you remember {3} ?",
     "How often do you think of {3} ?",
     "Does it bother you to forget that ?",
@@ -700,12 +718,9 @@ models = [
       "Do you remember any dreams or nightmares from childhood?",
       "Did the other children sometimes tease you?",
       "How do you think your childhood experiences relate to your feelings today?"
-    ]
+    ],
+
   ],
-
-
-
-
 
 
   ////////////////////////////////////////////////////////////////////////////
