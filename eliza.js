@@ -26,56 +26,183 @@ function makeElizaAnswer(query) {
   var regex;
   var array;
   for (var i = 0; i < models.length; i++) {
-    //console.log(models[i], i);
     regex = RegExp(models[i][0], 'i');
-
     if (regex.test(query)) {
       array = regex.exec(query);
-      while (models[i][1] === "@") {
-        i--;
-        console.log('i--;');
-      }
-      console.log(array, models[i][0]);
+      // @ is a reference to the previous sample responses
+      while (models[i][1] === "@") {i--; }
+      //console.log(array, models[i][0]);
       var output = models[i][1][Math.floor(Math.random() * models[i][1].length)];
       for (var j = 1; j < array.length; j++) {
         var regex = /\,(.*)[\?\!]?/gi;
         output = output.replace("{" + j + "}", array[j].replace(regex, ''));
       }
-      return output;
+      return try_use_syns(output);
     }
-
   }
   var output = nonModels[Math.floor(Math.random() * nonModels.length)];
   output = output.replace("{}", query);
-  return output;
+  return try_use_syns(output);
 }
 
-function tryBuildAnswer(query, regex, i) {
-
-  return 'null';
+function try_use_syns(text){
+  words=text.split(' ');
+  for(var i=0; i<words.length; i++){
+    var j=synonymsList.indexOf(words[i]);
+    if(j>=0 && Math.random()>0.3){
+      words[i]= synonyms[j][rand=Math.floor(Math.random()* synonyms[j].length)];
+    }
+  }
+  return words.join(' ');
 }
 
-/*
-Typycal model:
-['expr', ["possible answer #1", "possible answer #2", ...]]
-Example:
-['(.*) if (.*)', ["We could say that {2} => {1}, if we were mathematicians.", \
-"Do you think it's likely that (2) => (1)?"]]
-*/
 
-var synonyms = {
-  "belief": ["feeling", "think", "wish"],
-  "cannot": ["can't", "cant"],
-  "desire": ["want", "need"],
-  "everyone": ["everybody", "nobody", "noone"],
-  "family": ["mother", "mom", "father", "dad", "sister", "brother", "wife", "children", "child"],
-  "happy": ["elated", "glad", "better"],
-  "sad": ["unhappy", "depressed", "sick"]
-};
+// a few
+var reflections = {
+    "am": "are",
+    "was": "were",
+    "i": "you",
+    "i'd": "you would",
+    "i've": "you have",
+    "i'll": "you will",
+    "my": "your",
+    "are": "am",
+    "you've": "I have",
+    "you'll": "I will",
+    "your": "my",
+    "yours": "mine",
+    "you": "me",
+    "me": "you"
+}
+
+var synonymsList = ["Come", "Go", "Run", "Hurry", "Hide", "Move", "Do", "Have",
+"Use", "Get", "Keep", "Put", "Take", "Make", "Break", "Destroy", "Kill", "Cut",
+"Fall", "Fly", "Decide", "Help", "Mark", "Plan", "Show", "Begin", "End", "Big",
+"Little", "New", "Old", "False", "True", "Fast", "Slow", "Cool", "Hot", "Quiet",
+"Noisy", "All", "None", "Normal", "Strange", "Describe", "Difference",
+"Explain", "Idea", "Look", "Story", "Tell", "Think", "Anger", "Angry", "Calm",
+"Eager", "Fear", "Happy", "Hate", "Love", "Moody", "Sad", "Scared", "Awful",
+"Bad", "Crooked", "Dangerous", "Dark", "Dull", "Fat", "Gross", "Hurt", "Lazy",
+"Predicament", "Trouble", "Ugly", "Amazing", "Beautiful", "Brave", "Bright",
+"Delicious", "Enjoy", "Famous", "Funny", "Good", "Great", "Mischievous", "Neat",
+"Popular", "Answer", "Ask", "Cry", "Say/Tell", "Mean (Something)", "Somewhat",
+"Somehow", "anyhow", "Definite", "Fair", "Important", "Interesting", "Part",
+"Place", ];
+
+var synonyms =[['advance', 'approach', 'arrive', 'near', 'reach'],
+['depart', 'disappear', 'fade', 'move', 'proceed'],
+['dash', 'escape', 'elope', 'flee', 'hasten'],
+['rush', 'run', 'speed', 'race', 'hasten'],
+['conceal', 'cover', 'mask', 'cloak', 'camouflage'],
+['plod', 'go', 'creep', 'crawl', 'inch'],
+['execute', 'enact', 'carry out', 'finish', 'conclude'],
+['hold', 'possess', 'own', 'contain', 'acquire'],
+['employ', 'utilize', 'exhaust', 'spend', 'expend'],
+['acquire', 'obtain', 'secure', 'procure', 'gain'],
+['hold', 'retain', 'withhold', 'preserve', 'maintain'],
+['place', 'set', 'attach', 'establish', 'assign'],
+['hold', 'catch', 'seize', 'grasp', 'win'],
+['create', 'originate', 'invent', 'beget', 'form'],
+['fracture', 'rupture', 'shatter', 'smash', 'wreck'],
+['ruin', 'demolish', 'raze', 'waste', 'kill'],
+['slay', 'execute', 'assassinate', 'murder', 'destroy'],
+['gash', 'slash', 'prick', 'nick', 'sever'],
+['drop', 'descend', 'plunge', 'topple', 'tumble'],
+['soar', 'hover', 'flit', 'wing', 'flee'],
+['determine', 'settle', 'choose', 'resolve'],
+['aid', 'assist', 'support', 'encourage', 'back'],
+['label', 'tag', 'price', 'ticket', 'impress'],
+['plot', 'scheme', 'design', 'draw', 'map'],
+['display', 'exhibit', 'present', 'note', 'point to'],
+['start', 'open', 'launch', 'initiate', 'commence'],
+['stop', 'finish', 'terminate', 'conclude', 'close'],
+['large', 'enormous', 'huge', 'immense', 'gigantic'],
+['small', 'tiny', 'diminutive', 'shrimp', 'runt'],
+['fresh', 'unique', 'original', 'unusual', 'novel'],
+['feeble', 'frail', 'ancient', 'weak', 'aged'],
+['wrong', 'fake', 'fraudulent', 'counterfeit', 'spurious'],
+['right', 'accurate', 'proper', 'precise', 'exact'],
+['quick', 'rapid', 'speedy', 'fleet', 'hasty'],
+['unhurried', 'gradual', 'leisurely', 'late', 'behind'],
+['chilly', 'cold', 'frosty', 'wintry', 'icy'],
+['feverish', 'warm', 'heated', 'sweltering', 'torrid'],
+['silent', 'still', 'soundless', 'mute', 'tranquil'],
+['loudly', 'earsplitting', 'stentorian', 'strident', 'clamorous'],
+['complete', 'entire', 'full', 'gross', 'outright'],
+['nothing', 'nobody', 'no one', 'zero', 'zilch'],
+['daily', 'traditional', 'familiar', 'routine', 'proper'],
+['abnormal', 'aberrant', 'anomalous', 'bent', 'bizarre'],
+['portray', 'characterize', 'picture', 'narrate', 'relate'],
+['disagreement', 'inequity', 'contrast', 'dissimilarity', 'incompatibility'],
+['elaborate', 'clarify', 'define', 'interpret', 'justify'],
+['thought', 'concept', 'conception', 'notion', 'understanding'],
+['gaze', 'see', 'glance', 'watch', 'survey'],
+['tale', 'myth', 'legend', 'fable', 'yarn'],
+['disclose', 'reveal', 'show', 'expose', 'uncover'],
+['judge', 'deem', 'assume', 'believe', 'consider'],
+['enrage', 'infuriate', 'arouse', 'nettle', 'exasperate'],
+['mad', 'furious', 'enraged', 'excited', 'wrathful'],
+['quiet', 'peaceful', 'still', 'tranquil', 'mild'],
+['keen', 'fervent', 'enthusiastic', 'involved', 'interested'],
+['fright', 'dread', 'terror', 'alarm', 'dismay'],
+['pleased', 'contented', 'satisfied', 'delighted', 'elated'],
+['despise', 'loathe', 'detest', 'abhor', 'disfavor'],
+['like', 'admire', 'esteem', 'fancy', 'care for'],
+['temperamental', 'changeable', 'short-tempered', 'glum', 'morose'],
+['miserable', 'uncomfortable', 'wretched', 'heart-broken', 'unfortunate'],
+['afraid', 'frightened', 'alarmed', 'terrified', 'panicked'],
+['dreadful', 'terrible', 'abominable', 'bad', 'poor'],
+['evil', 'immoral', 'wicked', 'corrupt', 'sinful'],
+['bent', 'twisted', 'curved', 'hooked', 'zigzag'],
+['perilous', 'hazardous', 'risky', 'uncertain', 'unsafe'],
+['shadowy', 'unlit', 'murky', 'gloomy', 'dim'],
+['boring', 'tiring,', 'tiresome', 'uninteresting', 'slow'],
+['stout', 'corpulent', 'fleshy', 'beefy', 'paunchy'],
+['improper', 'rude', 'coarse', 'indecent', 'crude'],
+['damage', 'harm', 'injure', 'wound', 'distress'],
+['indolent', 'slothful', 'idle', 'inactive', 'sluggish'],
+['quandary', 'dilemma', 'pickle', 'problem', 'plight'],
+['distress', 'anguish', 'anxiety', 'worry', 'wretchedness'],
+['hideous', 'frightful', 'frightening', 'shocking', 'horrible'],
+['incredible', 'unbelievable', 'improbable', 'fabulous', 'wonderful'],
+['pretty', 'lovely', 'handsome', 'attractive', 'gorgeous'],
+['courageous', 'fearless', 'dauntless', 'intrepid', 'plucky'],
+['shining', 'shiny', 'gleaming', 'brilliant', 'sparkling'],
+['savory', 'delectable', 'appetizing', 'luscious', 'scrumptious'],
+['appreciate', 'delight in', 'be pleased', 'indulge in', 'luxuriate in'],
+['well-known', 'renowned', 'celebrated', 'famed', 'eminent'],
+['humorous', 'amusing', 'droll', 'comic', 'comical'],
+['excellent', 'fine', 'superior', 'wonderful', 'marvelous'],
+['noteworthy', 'worthy', 'distinguished', 'remarkable', 'grand'],
+['prankish', 'playful', 'naughty', 'roguish', 'waggish'],
+['clean', 'orderly', 'tidy', 'trim', 'dapper'],
+['well-liked', 'approved', 'accepted', 'favorite', 'celebrated'],
+['reply', 'respond', 'retort', 'acknowledge'],
+['question', 'inquire of', 'seek information from', 'put a question to', 'demand'],
+['shout', 'yell', 'yowl', 'scream', 'roar'],
+['inform', 'notify', 'advise', 'relate', 'recount'],
+['add up to', 'affect', 'be important', 'be of value', 'be substantive'],
+['a little', 'sort of', 'kind of', 'a bit', 'relatively'],
+['in a way', 'virtually', 'to a certain extent', 'in some measure', 'to some extent'],
+['anyway', 'anywise', 'by hook or by crook', 'another', 'howsoever'],
+['certain', 'sure', 'positive', 'determined', 'clear'],
+['just', 'impartial', 'unbiased', 'objective', 'unprejudiced'],
+['necessary', 'vital', 'critical', 'indispensable', 'valuable'],
+['fascinating', 'engaging', 'sharp', 'keen', 'bright'],
+['portion', 'share', 'piece', 'allotment', 'section'],
+['space', 'area', 'spot', 'plot', 'region']];
+
+
+
+  ////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////      MODELS      ///////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
+
+
 
 
 models = [
-  ////////////////////////////////////////////////////////////////////////////
+
   //////////////////////////      Mines       ////////////////////////////////
 
   ['(.*) if (.*)',
@@ -96,8 +223,7 @@ models = [
     ['"else" statements are usually used in coding, are you a programmer?']
   ],
 
-  ////////////////////////////////////////////////////////////////////////////
-  //////////////////////////     1st data base    ////////////////////////////
+  ///////////////////////    mixture of data bases    ////////////////////////
 
   ["(.*)i remember (.*)", [
     "Do you often think of {2} ?",
@@ -168,15 +294,6 @@ models = [
   ["francais", ["Sorry, I don't understand French. But I love their food!"]],
   ["italiano", ["Sorry, I don't understand Italian. But I enjoy Italian coffee."]],
   ["espanol", ["Sorry, I don't understand Spanish. I only speak English."]],
-
-
-
-
-
-
-
-  ////////////////////////////////////////////////////////////////////////////
-  //////////////////////////     2nd data base    ////////////////////////////
 
 
 
@@ -594,6 +711,11 @@ models = [
   ]
 
 ];
+
+
+////////////////////////////////////////////////////////////////////////////
+//////////////////////////   DEFAULT ANSWERS   /////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 nonModels = [
   "I'm not sure I understand you fully.",
