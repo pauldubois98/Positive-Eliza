@@ -8,6 +8,7 @@
   <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="logo icon" href="logo.jpg">
   <!-- others -->
   <meta charset="utf-8" />
   <title>Positive Eliza</title>
@@ -19,13 +20,28 @@
 </head>
 
 <body>
-  <h1>A positive Eliza</h1>
-  <form class="" action="#" onsubmit="userQuery();return false">
-    <input id="userInput" type="text" name="" value="" hit="Type here.">
-    <input type="submit" value="Send" />
+  <div id = 'all'>
+    <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo right"><img src = 'logo.jpg' width = 60em/></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Share</a></li>
+        <li><a href="#"></a></li>
+      </ul>
+    </div>
+    </nav>
 
-  </form>
-  <div id="conversation"></div>
+    <div id = 'main'>
+    <h1>Lily</h1>
 
+    <form class="" action="#" onsubmit="userQuery();return false">
+      <input id="userInput" type="text" name="" value="" hit="Type here.">
+      <input type="submit" value="Send" />
+
+    </form>
+    <div id="conversation"></div>
+    </div>
+  </div>
 </body>
 <script type="text/javascript" src="eliza.js"></script>

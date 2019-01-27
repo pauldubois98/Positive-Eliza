@@ -1,14 +1,28 @@
 h1 {
-  color: red;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  text-align: center;
+  font-weight: 900;
+  font-size: 60px;
+  font-style: italic;
+  color: #f44336;
 }
 p{
   margin: 0.2em;
   padding: 0;
 }
-body{
-  width: 20em;
+body{background-color: #fce4ec }
+
+#all {
+  background-color: #f1f8e9;
+  height: 60em;
+  width: 65%;
   margin: auto;
 }
+#main  {
+  width: 23em;
+  margin: auto;
+}
+
 #userInput{
   width: 16em;
 }
