@@ -261,13 +261,11 @@ models = [
     "Did you think I would forget {2} ?",
     "Why do you think I should recall {2} now ?",
     "What about {2} ?",
-    "goto what",
     "You mentioned {2} ?"
   ]],
   ["(.*)you remember (.*)", [
     "How could I forget {2} ?",
     "What about {2} should I remember ?",
-    "goto you"
   ]],
 
   ["(.*)i (.*)forget (.*)", [
@@ -284,7 +282,6 @@ models = [
     "Are you sure you told me ?",
     "Would it bother you if I forgot {2} ?",
     "Why should I recall {2} just now ?",
-    "goto what",
     "Tell me more about {2}."
   ]],
 
@@ -292,7 +289,6 @@ models = [
     "Really, {2} ?",
     "Have you ever fantasized {2} while you were awake ?",
     "Have you ever dreamed {2} before ?",
-    "goto dream"
   ]],
   ["dream", [
     "What does that dream suggest to you ?",
@@ -424,7 +420,6 @@ models = [
     "Were you {2} ?",
     "What would it mean if you were {2} ?",
     "What does ' {2} ' suggest to you ?",
-    "goto what"
   ]],
   ["(.*) am i (.*)", [
     "Do you believe you are {2} ?",
@@ -470,7 +465,6 @@ models = [
       "Would you prefer if I weren't {2} ?",
       "Perhaps I am {2} in your fantasies.",
       "Do you sometimes think I am {2} ?",
-      "goto what",
       "Would it matter to you ?",
       "What if I were {2} ?"
     ]
