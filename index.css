@@ -2,40 +2,47 @@ h1 {
   font-family: "Comic Sans MS", cursive, sans-serif;
   text-align: center;
   font-weight: 900;
-  font-size: 60px;
+  font-size: 3em;
   font-style: italic;
-  color: #f44336;
+}
+h2 {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  text-align: center;
+  font-weight: 900;
+  font-size: 2em;
+  font-style: italic;
 }
 p{
   margin: 0.2em;
   padding: 0;
 }
-body{background-color: #fce4ec }
 
-#all {
-  background-color: #f1f8e9;
-  height: 60em;
-  width: 65%;
-  margin: auto;
-}
 #main  {
   width: 23em;
   margin: auto;
+  padding: 0;
 }
-
+form{
+  padding: 0;
+  margin: 0;
+}
 #userInput{
   width: 16em;
+  padding: 0;
+  margin: 0;
 }
 #userSubmit{
   width: 4em;
+  padding: 0;
+  margin: 0;
 }
 .space{
   display: inline-block;
   width: 0em;
 }
 .user{
-  color: #49F
+  color: #1565c0;
 }
 .bot{
-  color: #2A3
+  color: #4caf50;
 }
